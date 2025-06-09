@@ -1,0 +1,92 @@
+<%- include('./adminHomeHeader.ejs')%>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #333;
+        margin-top: 10px;
+    }
+
+    #space {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #eaf2f8;
+    }
+
+    span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>All Vacancies</h2>
+        <span style="color:red"><%= message %></span>
+    </center>
+
+    <% if (vacancies.length > 0) { %>
+        <table width="100%" id="space" border="1" cellspacing="0" cellpadding="10">
+            <thead>
+                <th>S.No</th>
+                <th>Vacancy ID</th>
+                <th>Post</th>
+                <th>Subject</th>
+                <th>Location</th>
+                <th>Experience</th>
+                <th>Salary</th>
+                <th>Last Date</th>
+                <th>Recruiter</th>
+            </thead>
+            <tbody>
+                <% vacancies.forEach((vacancy, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= vacancy.vacancyId %></td>
+                        <td><%= vacancy.post %></td>
+                        <td><%= vacancy.subject %></td>
+                        <td><%= vacancy.location %></td>
+                        <td><%= vacancy.experience %></td>
+                        <td><%= vacancy.salary %></td>
+                        <td><%= vacancy.lastDate.toDateString() %></td>
+                        <td><%= vacancy.recruiter %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</body>

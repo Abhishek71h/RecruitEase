@@ -1,0 +1,154 @@
+<%- include('./homeHeader.ejs') %>
+
+<style>
+    #loginbox {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 30px 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #loginbox h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    #loginbox input[type="text"],
+    #loginbox input[type="email"],
+    #loginbox input[type="password"],
+    #loginbox input[type="date"],
+    #loginbox input[type="file"],
+    #loginbox select,
+    #loginbox textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
+
+    #loginbox input[type="file"] {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    #loginbox textarea {
+        resize: vertical;
+    }
+
+    #loginbox .gender-section,
+    #loginbox .resume-section {
+        margin: 10px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    #loginbox .gender-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    #loginbox .gender-section label {
+        margin-right: 10px;
+        font-weight: normal;
+    }
+
+    #loginbox input[type="submit"],
+    #loginbox input[type="reset"] {
+        width: 48%;
+        padding: 10px;
+        margin: 10px 1%;
+        background-color: #6c63ff;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+
+    #loginbox input[type="submit"]:hover,
+    #loginbox input[type="reset"]:hover {
+        background-color: #084298;
+    }
+
+    #loginbox a#demolink {
+        display: inline-block;
+        margin-top: 15px;
+        color: #0d6efd;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    #loginbox a#demolink:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div id="loginbox">
+    <center>
+        <h2>Candidate Registration</h2>
+        <form action="/candidate/candidateRegistration" method="post" enctype="multipart/form-data">
+            <input type="text" placeholder="Enter Full Name" name="name" required> 
+
+            <input type="email" placeholder="Enter Email" name="_id" required> 
+
+            <input type="password" placeholder="Enter Password" name="password" required> 
+
+            <div class="gender-section">
+                <span>Select Gender: </span>
+                <input type="radio" id="male" value="Male" name="gender">
+                <label for="male">Male</label>
+                <input type="radio" id="female" value="Female" name="gender">
+                <label for="female">Female</label>
+            </div>
+
+            <input type="date" name="dob" required>
+
+            <textarea name="address" rows="3" placeholder="Enter Address" required></textarea>
+
+            <input type="text" maxlength="10" placeholder="Enter 10-digit Mobile No." name="contact" required> 
+
+            <select name="qualification" required>
+                <option value="">Select Qualification</option>
+                <option value="B.COM">B.COM</option>
+                <option value="BCA">BCA</option>
+                <option value="BBA">BBA</option>
+                <option value="MBA">MBA</option>
+                <option value="MCA">MCA</option>
+                <option value="ME">ME</option>
+                <option value="PHD">PHD</option>
+            </select>
+
+            <input type="text" placeholder="Enter Percentage" name="percentage" required>
+
+            <select name="experience" required>
+                <option value="">Select Experience</option>
+                <option value="Fresher">Fresher</option>
+                <option value="1+ Year">1+ Year</option>
+                <option value="2+ Year">2+ Year</option>
+                <option value="3+ Year">3+ Year</option>
+                <option value="5+ Year">5+ Year</option>
+                <option value="10+ Year">10+ Year</option>
+            </select>
+
+            <div class="resume-section">
+                <span>Resume:</span>
+                <input type="file" name="docs" required>
+            </div>
+
+            <div style="display: flex; justify-content: space-between;">
+                <input type="submit" value="Register">
+                <input type="reset" value="Reset">
+            </div>
+        </form>    
+
+        <a id="demolink" href="/candidate/candidateLogin">Already Registered? Login Here</a>
+    </center>
+</div>

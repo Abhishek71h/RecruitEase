@@ -1,0 +1,120 @@
+<%- include('./adminHomeHeader.ejs')%>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    #space {
+        margin: 20px auto;
+        border-collapse: collapse;
+        width: 90%;
+        background-color: #ffffff;
+    }
+
+    caption {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    table {
+        width: 100%;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #eaf2f8;
+    }
+
+    h2 {
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .error-message {
+        font-size: 20px;
+        color: red;
+        font-weight: bold;
+    }
+
+    .status {
+        font-weight: bold;
+        color: #4CAF50;
+    }
+
+    a {
+        text-decoration: none;
+        color: #4CAF50;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>Recruiter List</h2>
+    </center>
+    <table width="100%" id="space" border="1" cellspacing="0" cellpadding="10">
+        <caption>
+            <center>
+                <span style="font-size:20px;color:red">
+                    <%=message%>
+                </span>
+            </center>
+        </caption>
+        <thead>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Recruiter Type</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>AdminVerify</th>
+            <th>EmailVerify</th>
+        </thead>
+        <tbody>
+            <%recruiterList.forEach((recruiter,index)=>{%>
+                 <tr>
+                    <td><%=index+1%></td>
+                    <td><%=recruiter.name%></td>
+                    <td><%=recruiter.recruiter%></td>
+                    <td><%=recruiter.email%></td>
+                    <td><%=recruiter.contact%></td>
+                    <td><%=recruiter.address%></td>
+                    <td><%=recruiter.status%></td>
+                    <td><a href="/admin/adminVerifyRecruiter?recruiterEmail=<%=recruiter.email%>"><%=recruiter.adminVerify%></a></td>
+                    <td><%=recruiter.emailVerify%></td>
+                </tr>   
+            <%})%>
+        </tbody>
+    </table>
+</body>

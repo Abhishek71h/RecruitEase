@@ -1,0 +1,133 @@
+<%- include('./recruiterHomeHeader.ejs')%>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    td a {
+        display: block;
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    td a:hover {
+        text-decoration: underline;
+    }
+
+    select#input {
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 12px;
+    }
+
+    input#inputbtn {
+        background-color: #6c63ff;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-left: 8px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    input#inputbtn:hover {
+        background-color: #574ed1;
+    }
+
+    span[style*="color:red"] {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>Applied Candidate Vacancy List</h2>
+            <span style="color:red"><%=message%></span>
+        <br>
+    </center>
+    <% if(message=="No Record Found"){%>
+        <center>
+            <span style="font-size:20px;color:red">
+                <%=message%>
+            </span>
+        </center>
+    <%}else{%>
+
+    <table width="100%" id="space" border="1" cellspacing="0" cellpadding="10">
+        <thead>
+            <th>S.No</th>
+            <th>AppliedVacancyId</th>
+            <th>VacancyId</th>
+            <th>CandidateEmail</th>
+            <th>RecruiterEmail</th>
+            <th>Post</th>
+            <th>RecruiterStatus</th>
+        </thead>
+        <tbody>
+           
+            <%appliedVacancyList.forEach((vacancy,index)=>{%>
+                 <tr>
+                    <td><%=index+1%></td>
+                    <td><%=vacancy.appliedVacancyId%></td>
+                    <td><%=vacancy.vacancyId%></td>
+                    <td><%=vacancy.candidateEmail%>
+                        <a href="documents/<%=result[index]%>"><%=result[index]%></a>
+                    </td>    
+                    <td><%=vacancy.recruiterEmail%></td>
+                    <td><%=vacancy.post%></td>
+                    <td>
+                        <form action="/recruiter/recruiterUpdateStatus" method="post">
+                        <input type="hidden" value="<%=vacancy.vacancyId%>" name="vacancyId">
+                        <select name="recruiterStatus" id="input">
+                            <option value="<%=vacancy.recruiterStatus%>"><%=vacancy.recruiterStatus%></option>
+                            <option value="ShortListed">ShortListed</option>
+                            <option value="Better Luck Next Time">Better Luck Next Time</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                        <input type="submit" value="Update Status" id="inputbtn">
+                        </form>
+                    </td>
+                </tr>   
+            <%})%>
+        </tbody>
+    </table>
+    <%}%>
+
+</body>

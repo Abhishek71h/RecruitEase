@@ -1,0 +1,94 @@
+<%- include('./adminHomeHeader.ejs')%>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #333;
+        margin-top: 10px;
+    }
+
+    table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #eaf2f8;
+    }
+
+    span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>All Applied Candidate Vacancies</h2>
+        <span style="color:red"><%= message %></span>
+    </center>
+
+    <% if (appliedVacancyList.length === 0) { %>
+        <center>
+            <span style="font-size:20px;color:red">
+                <%= message %>
+            </span>
+        </center>
+    <% } else { %>
+        <table width="100%" border="1" cellspacing="0" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>AppliedVacancyId</th>
+                    <th>VacancyId</th>
+                    <th>CandidateEmail</th>
+                    <th>RecruiterEmail</th>
+                    <th>Post</th>
+                    <th>RecruiterStatus</th>
+                    <th>Resume</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% appliedVacancyList.forEach((vacancy, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= vacancy.appliedVacancyId %></td>
+                        <td><%= vacancy.vacancyId %></td>
+                        <td><%= vacancy.candidateEmail %></td>
+                        <td><%= vacancy.recruiterEmail %></td>
+                        <td><%= vacancy.post %></td>
+                        <td><%= vacancy.recruiterStatus %></td>
+                        <td><%= result[index] ? result[index] : "Not Uploaded" %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</body>

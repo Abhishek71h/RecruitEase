@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecruitEase Platform</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbox.css">
+</head>
+<body>
+    <div id="header">
+        <img src="images/logo.jpg" id="logo" alt="">
+        <span id="heading"> RecruitEase | Recruiter Panel | <%=email%> </span>
+    </div>
+    <div id="nav">
+        <ul>
+            <li><a href="/recruiter/recruiterHome">Home</a></li>
+            <li><a href="/recruiter/addVacancy">Add Vacancy</a></li>
+            <li><a href="/recruiter/vacancyPosted">Posted Vacancy</a></li>
+            <li><a href="/recruiter/appliedCandidateList">Applied Candidate List</a></li>
+            <!-- <li><a href="">Change Password</a></li> -->
+            <li><a href="/recruiter/recruiterLogout">Logout</a></li>
+        </ul>
+    </div>
+
+
+   <!-- Chat Icon -->
+<div id="chat-icon" onclick="toggleChatbox()">💬</div>
+
+<!-- Chatbox Container -->
+<div id="chatbox">
+  <div id="chat-header">
+    RecruitEase AI Chat
+    <span id="close-chat" onclick="toggleChatbox()">❌</span>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-container">
+    <input type="text" id="chat-input" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+
+<script>
+    function toggleChatbox() {
+  const chatbox = document.getElementById("chatbox");
+  if (chatbox.style.display === "none" || !chatbox.style.display) {
+    chatbox.style.display = "flex";
+  } else {
+    chatbox.style.display = "none";
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const chatMessages = document.getElementById("chat-messages");
+
+  const userMsg = document.createElement("div");
+  userMsg.innerText = "You: " + message;
+  chatMessages.appendChild(userMsg);
+  input.value = "";
+
+  const aiMsg = document.createElement("div");
+  aiMsg.innerText = "RecruitEase AI: typing...";
+  chatMessages.appendChild(aiMsg);
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    const res = await fetch("/recruiter/chatbot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    const data = await res.json();
+    aiMsg.innerText = "RecruitEase AI: " + data.reply;
+
+  } catch (err) {
+    aiMsg.innerText = "Error: Could not get response.";
+    console.error(err);
+  }
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+</script>
+</body>
+</html>

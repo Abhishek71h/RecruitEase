@@ -1,0 +1,97 @@
+<%- include('./recruiterHomeHeader.ejs')%>
+<style>
+    /* Table styling */
+    table#space {
+        border-collapse: collapse;
+        width: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    table#space th, table#space td {
+        text-align: left;
+        padding: 12px 10px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    table#space thead {
+        background-color: #28a745;
+        color: white;
+    }
+
+    table#space tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    table#space tbody tr:hover {
+        background-color: #e6e6ff;
+    }
+
+    h2 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
+
+    span[style*="color:red"] {
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>Recruiter's Vacancy List</h2>
+        <br>
+    </center>
+    <% if(message=="No Record Found"){%>
+        <center>
+            <span style="font-size:20px;color:red">
+                <%=message%>
+            </span>
+        </center>
+    <%}else{%>
+
+    <table width="100%" id="space" border="1" cellspacing="0" cellpadding="10">
+        <thead>
+            <th>S.No</th>
+            <th>VacancyId</th>
+            <th>Post</th>
+            <th>Subject</th>
+            <th>Location</th>
+            <th>Criteria</th>
+            <th>Experience</th>
+            <th>Mode</th>
+            <th>Vacancy</th>
+            <th>Salary</th>
+            <th>AdvDate</th>
+            <th>LastDate</th>
+            <!-- <th>Update</th>
+            <th>Delete</th> -->
+        </thead>
+        <tbody>
+           
+            <%vacancyList.forEach((vacancy,index)=>{%>
+                 <tr>
+                    <td><%=index+1%></td>
+                    <td><%=vacancy.vacancyId%></td>
+                    <td><%=vacancy.post%></td>
+                    <td><%=vacancy.subject%></td>
+                    <td><%=vacancy.location%></td>
+                    <td><%=vacancy.criteria%></td>
+                    <td><%=vacancy.experience%></td>
+                    <td><%=vacancy.mode%></td>
+                    <td><%=vacancy.vacancy%></td>
+                    <td><%=vacancy.salary%></td>
+                    <td><%=vacancy.advDate%></td>
+                    <td><%=vacancy.lastDate%></td>
+                    <!-- <td><a href="#">Update</a></td>
+                    <td><a href="#">Delete</a></td> -->
+                </tr>   
+            <%})%>
+        </tbody>
+    </table>
+    <%}%>
+
+</body>

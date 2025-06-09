@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecruitEase Platform</title>
+    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbox.css">
+
+</head>
+<body>
+    <div id="header">
+        <img src="images/logo.jpg" id="logo" alt="">
+        <span id="heading">RecruitEase | Candidate Panel | <%=email%> </span>
+    </div>
+    <div id="nav">
+        <ul>
+            <li><a href="/candidate/candidateHome">Home</a></li>
+            <li><a href="/candidate/vacancyList">Vacancy List</a></li>
+            <li><a href="/candidate/myStatus">MyStatus</a></li>
+            <!-- <li><a href="#">Resume_Tracker</a></li> -->
+            <li><a href="/candidate/candidateLogout">Logout</a></li>
+        </ul>
+    </div>
+
+
+    <!-- Chat Icon -->
+<div id="chat-icon" onclick="toggleChatbox()">💬</div>
+
+<!-- Chatbox Container -->
+<div id="chatbox">
+  <div id="chat-header">
+    RecruitEase AI Chat
+    <span id="close-chat" onclick="toggleChatbox()">❌</span>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-container">
+    <input type="text" id="chat-input" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  let isSendingMessage = false; // Add flag to check if message is being sent
+
+  function toggleChatbox() {
+    const chatbox = document.getElementById("chatbox");
+    if (chatbox.style.display === "none" || !chatbox.style.display) {
+      chatbox.style.display = "flex";
+    } else {
+      chatbox.style.display = "none";
+    }
+  }
+
+  async function sendMessage() {
+    if (isSendingMessage) return; // Prevent sending multiple messages at once
+    
+    const input = document.getElementById("chat-input");
+    const message = input.value.trim();
+    if (!message) return; // Prevent sending empty messages
+
+    const chatMessages = document.getElementById("chat-messages");
+
+    // Display user's message
+    const userMsg = document.createElement("div");
+    userMsg.innerText = "You: " + message;
+    chatMessages.appendChild(userMsg);
+    input.value = "";
+
+    // Display "typing..." message for AI
+    const aiMsg = document.createElement("div");
+    aiMsg.innerText = "RecruitEase AI: typing...";
+    chatMessages.appendChild(aiMsg);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    isSendingMessage = true; // Set flag to prevent multiple submissions
+
+    try {
+      // Send message to the backend
+      const res = await fetch("/candidate/chatbot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+      aiMsg.innerText = "RecruitEase AI: " + data.reply; // Update AI response
+
+    } catch (err) {
+      aiMsg.innerText = "Error: Could not get response.";
+      console.error(err);
+    }
+
+    isSendingMessage = false; // Reset flag when response is received
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Ensure the chatbox scrolls to the latest message
+  }
+</script>
+
+
+
+
+</body>
+</html>

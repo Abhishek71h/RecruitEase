@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RecruitEase Platform</title>
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg"/>
+  <link rel="stylesheet" href="css/style.css"/>
+
+  <style>
+    /* Container for the login form */
+    #loginbox {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 30px 40px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Form heading */
+    #loginbox h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Input styling (larger height) */
+    #input[type="email"],
+    #input[type="password"] {
+      width: 100%;
+      padding: 16px; /* increased height */
+      margin: 12px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    /* Buttons container for side-by-side layout */
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    /* Button styling */
+    #inputbtn[type="submit"],
+    #inputbtn[type="reset"] {
+      width: 48%;
+      padding: 12px;
+      background-color: #6c63ff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #inputbtn[type="submit"]:hover,
+    #inputbtn[type="reset"]:hover {
+      background-color: #574ed1;
+    }
+
+    /* Error message */
+    span[style="color:red"] {
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <img src="images/logo.jpg" id="logo" alt="" />
+    <span id="heading">RecruitEase</span>
+  </div>
+
+  <div id="nav">
+    <ul>
+      <li><a href="#">Home | Admin Panel</a></li>
+    </ul>
+  </div>
+
+  <div id="loginbox">
+    <center>
+      <h2>Admin Login Form</h2>
+      <span style="color:red"><%=message%></span>
+
+      <form action="/admin/adminLogin" method="post">
+        <input id="input" type="email" placeholder="Enter Email" name="email" /> <br />
+        <input id="input" type="password" placeholder="Enter Password" name="password" /> <br />
+
+        <div class="button-group">
+          <input id="inputbtn" type="submit" value="Login" />
+          <input id="inputbtn" type="reset" value="Reset" />
+        </div>
+      </form>
+    </center>
+  </div>
+</body>
+</html>

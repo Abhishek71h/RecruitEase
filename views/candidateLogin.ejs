@@ -1,0 +1,91 @@
+<%- include('./homeHeader.ejs') %>
+
+<style>
+    #loginbox {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 30px 40px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #loginbox h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    #loginbox input[type="email"],
+    #loginbox input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    #loginbox .button-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #loginbox input[type="submit"],
+    #loginbox input[type="reset"] {
+        width: 48%;
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #6c63ff;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #loginbox input[type="submit"]:hover,
+    #loginbox input[type="reset"]:hover {
+        background-color: #084298;
+    }
+
+    #loginbox a#demolink {
+        display: inline-block;
+        margin: 10px 5px;
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+    #loginbox a#demolink:hover {
+        text-decoration: underline;
+    }
+
+    span[style="color:red"] {
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>
+
+<div id="loginbox">
+    <center>
+        <h2>Candidate Login Form</h2>
+
+        <% if (typeof message !== 'undefined') { %>
+            <span style="color:red"><%= message %></span>
+        <% } %>
+
+        <form action="/candidate/candidateLogin" method="post">
+            <input type="email" placeholder="Enter Email" id="email" name="email" required> <br>
+            <input type="password" placeholder="Enter Password" id="password" name="password" required> <br>
+            
+            <div class="button-row">
+                <input type="submit" value="Login">
+                <input type="reset" value="Reset">
+            </div>
+        </form>    
+
+        <a id="demolink" href="/candidate/candidateRegistration">Yet Not Registered? Register Here</a> <br>
+        <a id="demolink" href="/candidate/forgotPassword">Forgot Password?</a>
+    </center>
+</div>

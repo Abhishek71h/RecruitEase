@@ -1,0 +1,112 @@
+<%- include('./adminHomeHeader.ejs')%>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-top: 10px;
+    }
+
+    #space {
+        width: 95%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    caption {
+        padding: 10px;
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #eaf2f8;
+    }
+
+    span {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    a {
+        color: #2980b9;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <br>
+    <center>
+        <h2>Candidate List</h2>
+    </center>
+    <table width="100%" id="space" border="1" cellspacing="0" cellpadding="10">
+        <caption>
+            <center>
+                <span style="font-size:20px;color:red">
+                    <%= message %>
+                </span>
+            </center>
+        </caption>
+        <thead>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>DOB</th>
+            <th>Address</th>
+            <th>Contact</th>
+            <th>Qualification</th>
+            <th>Percentage</th>
+            <th>Experience</th>
+            <th>Status</th>
+            <th>AdminVerify</th>
+            <th>EmailVerify</th>
+        </thead>
+        <tbody>
+            <% candidateList.forEach((candidate, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= candidate.name %></td>
+                    <td><%= candidate.gender %></td>
+                    <td><%= candidate._id %></td>
+                    <td><%= candidate.dob %></td>
+                    <td><%= candidate.address %></td>
+                    <td><%= candidate.contact %></td>
+                    <td><%= candidate.qualification %></td>
+                    <td><%= candidate.percentage %></td>
+                    <td><%= candidate.experience %></td>
+                    <td><%= candidate.status %></td>
+                    <td><a href="/admin/adminVerifyCandidate?candidateEmail=<%= candidate._id %>"><%= candidate.adminVerify %></a></td>
+                    <td><%= candidate.emailVerify %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>

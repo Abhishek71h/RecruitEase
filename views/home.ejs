@@ -1,0 +1,190 @@
+<%- include('./homeHeader.ejs') %>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    #banner {
+        width: 100%;
+        height: auto;
+        background: linear-gradient(135deg, #6c63ff 0%, #a683e3 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        animation: fadeIn 1.5s ease-in;
+        margin-bottom: 20px; /* Space between banner and content */
+    }
+
+    #banner_img {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+        animation: float 4s ease-in-out infinite;
+        display: block;
+        margin: 0 auto; /* Center the banner image */
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .intro {
+        padding: 40px;
+        max-width: 1000px;
+        margin: -60px auto 40px auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        position: relative;
+        z-index: 10;
+    }
+
+    .intro h2 {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+        color: #4b4b4b;
+    }
+
+    .intro h3 {
+        margin-top: 30px;
+        color: #333;
+        font-size: 1.4rem;
+    }
+
+    .intro ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .intro ul li {
+        margin: 10px 0;
+        line-height: 1.6;
+        padding-left: 1.5em;
+        position: relative;
+        font-size: 1rem;
+    }
+
+    .intro ul li::before {
+        content: "✔";
+        color: #6c63ff;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .highlight {
+        background: #f0f0ff;
+        padding: 15px 20px;
+        border-left: 5px solid #6c63ff;
+        margin-top: 30px;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        #banner_img {
+            max-height: 250px;
+        }
+
+        .intro {
+            padding: 20px;
+        }
+
+        .intro h2 {
+            font-size: 1.6rem;
+        }
+
+        .intro h3 {
+            font-size: 1.2rem;
+        }
+
+        .intro ul li {
+            font-size: 0.95rem;
+        }
+    }
+</style>
+
+<!-- Banner Image -->
+<div id="banner">
+    <img src="images/banner.png" id="banner_img" alt="RecruitEase Banner">
+</div>
+
+<!-- Intro Section -->
+<section class="intro">
+    <h2>Welcome to RecruitEase</h2>
+    <p>
+        <strong>RecruitEase</strong> is a job recruitment web application that bridges the gap between candidates and recruiters through seamless interaction and intuitive features. The main objective of this web application is to provide the source of interaction
+              between School, Colleges, Professional Institutions and candidate, both locally
+              and globally, where the candidates find their dream jobs and School, College and
+              Professional Institutions find the right candidate to fulfil their needs.
+    </p>
+    
+    <div class="highlight">
+        <strong>Our Mission:</strong><br>
+        To simplify and digitalize recruitment, making it accessible, efficient, and transparent.
+    </div>
+
+    <h3>Key Features</h3>
+    <ul>
+        <li>User Roles and Access Control</li>
+        <li>Authentication and Authorization</li>
+        <li>Modern Web Technologies</li>
+        <li>Scalability</li>
+        <li>Real-World Application</li>
+        <li>Real-Time Automation</li>
+    </ul>
+
+    <h3>Modules</h3>
+    <ul>
+        <li>Administrator</li>
+        <li>Candidate</li>
+        <li>School, College, and Professional Institutions</li>
+    </ul>
+    
+    <h3 class="mt-4">Roles and Functionalities</h3>
+      <br>
+            <p><strong>A) Administrator</strong></p>
+            <ul>
+              <li>Has full authority over the platform.</li>
+              <li>Has responsible for managing the core operations of the RecruitEase. </li>
+              <li>Can view, approve, or block any registered candidate or recruiter.</li>
+              <li>Can manage and monitor job postings and activity across the platform.</li>
+            </ul>
+      
+            <p><strong>B) Recruiter</strong></p>
+            <ul>
+              <li>Can create and manage job postings.</li>
+              <li>Can view and shortlist candidate applications.</li>
+              <li>Select the candidates for the interview. </li>
+              <li>Authority to Change or Update their Password.</li>
+            </ul>
+      
+            <p><strong>C) Candidate</strong></p>
+            <ul>
+              <li>Can register and build a professional profile.</li>
+              <li>Can apply to job postings relevant to their skills.</li>
+              <li>Can also view its own applied vacancy status. </li>
+              <li>Authority to Change or Update their Password.</li>
+            </ul>
+      
+            <p class="mt-4">This platform is designed to serve <strong>Schools, Colleges, and Professional Institutions</strong> by connecting their students with relevant job opportunities efficiently.</p>
+</section>
