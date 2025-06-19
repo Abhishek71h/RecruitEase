@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecruitEase Platform</title>
-    <link rel="icon" href="images/logo.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/chatbox.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecruitEase</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbox.css">
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg">
 </head>
 <body>
-    <div id="header">
-        <img src="images/logo.jpg" id="logo" alt="">
-        <span id="heading"> RecruitEase | Recruiter Panel | <%=email%> </span>
+
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <img src="images/logo.jpg" alt="RecruitEase Logo" class="navbar-logo">
+        <span class="navbar-title">RecruitEase | Recruiter Panel | <%=email%> </span>
+      </div>
+      <nav class="navbar-menu">
+        <a href="/recruiter/recruiterHome">Home</a>
+        <a href="/recruiter/addVacancy">Post</a>
+        <a href="/recruiter/vacancyPosted">Posted</a>
+        <a href="/recruiter/appliedCandidateList">Applicants</a>
+        <a href="/recruiter/recruiterLogout">Logout</a>
+      </nav>
     </div>
-    <div id="nav">
-        <ul>
-            <li><a href="/recruiter/recruiterHome">Home</a></li>
-            <li><a href="/recruiter/addVacancy">Add Vacancy</a></li>
-            <li><a href="/recruiter/vacancyPosted">Posted Vacancy</a></li>
-            <li><a href="/recruiter/appliedCandidateList">Applied Candidate List</a></li>
-            <!-- <li><a href="">Change Password</a></li> -->
-            <li><a href="/recruiter/recruiterLogout">Logout</a></li>
-        </ul>
-    </div>
+  </header>
 
 
-   <!-- Chat Icon -->
+<!-- Chat Icon -->
 <div id="chat-icon" onclick="toggleChatbox()">💬</div>
 
 <!-- Chatbox Container -->
@@ -41,55 +43,66 @@
   </div>
 </div>
 
-
 <script>
-    function toggleChatbox() {
+  let isSendingMessage = false; // Add flag to check if message is being sent
+
+function toggleChatbox() {
   const chatbox = document.getElementById("chatbox");
-  if (chatbox.style.display === "none" || !chatbox.style.display) {
-    chatbox.style.display = "flex";
+  const isVisible = chatbox.classList.contains("show");
+
+  if (isVisible) {
+    chatbox.classList.remove("show");
   } else {
-    chatbox.style.display = "none";
+    chatbox.classList.add("show");
   }
 }
 
-async function sendMessage() {
-  const input = document.getElementById("chat-input");
-  const message = input.value.trim();
-  if (!message) return;
 
-  const chatMessages = document.getElementById("chat-messages");
+  async function sendMessage() {
+    if (isSendingMessage) return; // Prevent sending multiple messages at once
+    
+    const input = document.getElementById("chat-input");
+    const message = input.value.trim();
+    if (!message) return; // Prevent sending empty messages
 
-  const userMsg = document.createElement("div");
-  userMsg.innerText = "You: " + message;
-  chatMessages.appendChild(userMsg);
-  input.value = "";
+    const chatMessages = document.getElementById("chat-messages");
 
-  const aiMsg = document.createElement("div");
-  aiMsg.innerText = "RecruitEase AI: typing...";
-  chatMessages.appendChild(aiMsg);
+    // Display user's message
+    const userMsg = document.createElement("div");
+    userMsg.innerText = "You: " + message;
+    chatMessages.appendChild(userMsg);
+    input.value = "";
 
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Display "typing..." message for AI
+    const aiMsg = document.createElement("div");
+    aiMsg.innerText = "RecruitEase AI: typing...";
+    chatMessages.appendChild(aiMsg);
 
-  try {
-    const res = await fetch("/recruiter/chatbot", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-    });
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    const data = await res.json();
-    aiMsg.innerText = "RecruitEase AI: " + data.reply;
+    isSendingMessage = true; // Set flag to prevent multiple submissions
 
-  } catch (err) {
-    aiMsg.innerText = "Error: Could not get response.";
-    console.error(err);
+    try {
+      // Send message to the backend
+      const res = await fetch("/candidate/chatbot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+      aiMsg.innerText = "RecruitEase AI: " + data.reply; // Update AI response
+
+    } catch (err) {
+      aiMsg.innerText = "Error: Could not get response.";
+      console.error(err);
+    }
+
+    isSendingMessage = false; // Reset flag when response is received
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Ensure the chatbox scrolls to the latest message
   }
-
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
 </script>
 </body>
 </html>

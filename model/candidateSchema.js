@@ -63,7 +63,7 @@ const candidateSchema = mongoose.Schema({
     },
     emailVerify:{
         type:String,
-        default:"Not Verified",
+        default: "Verified",
         required:true
     }
 });

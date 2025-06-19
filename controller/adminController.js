@@ -6,16 +6,11 @@ import recruiterSchema from "../model/recruiterSchema.js";
 import candidateSchema from "../model/candidateSchema.js";
 import appliedVacancySchema from "../model/appliedVacancySchema.js";
 import VacancySchema from '../model/vacancySchema.js';
-
 dotenv.config();
-
 var admin_secret_key = process.env.ADMIN_SECRET_KEY;
-//console.log("admin_secret_key : ",typeof admin_secret_key);
 
 export const adminLoginController = async(request,response)=>{
     try{
-         //console.log("admin Email : ",request.body.email);
-         
          const adminObj = await adminSchema.findOne({email:request.body.email});
          const adminPassword = adminObj.password;
          const status = await bcrypt.compare(request.body.password,adminPassword);
@@ -55,11 +50,9 @@ export const adminRecruiterListController = async(request,response)=>{
     try{
         const recruiterList = await recruiterSchema.find();
         response.render("adminRecruiterList",{email:request.payload.email,recruiterList:recruiterList,message:""});
-        //response.status(200).send({email:request.payload.email,recruiterList:recruiterList,message:""});
     }catch(error){
         console.log("Error at adminRecruiterListController");
         response.render("adminHome",{email:request.payload.email});
-        //response.status(500).send({email:request.payload.email});
     }
 }
 
@@ -72,21 +65,17 @@ export const adminVerifyRecruiterController = async(request,response)=>{
             }
         }
         const updateResult = await recruiterSchema.updateOne({email:recruiterEmail},updateStatus);
-        //console.log("Update Result : ",updateResult);
-        
         const recruiterList = await recruiterSchema.find();
-        response.render("adminRecruiterList",{email:request.payload.email,recruiterList:recruiterList,message:recruiterEmail+" Verified Successfully"});
-        console.log("-------> ",recruiterList);
-        
-     response.status(200).send({email:request.payload.email,recruiterList:recruiterList,message:recruiterEmail+" Verified Successfully"});
+        response.render("adminRecruiterList", {
+        email: request.payload.email,
+        recruiterList: recruiterList,
+        message: recruiterEmail + " Verified Successfully"});
     }catch(error){
         console.log("Error in adminVerifyRecruiterController : ",error);    
         const recruiterList = await recruiterSchema.find();
         response.render("adminRecruiterList",{email:request.payload.email,recruiterList:recruiterList,message:"Error While Updating Recruiter"});
-        //response.status(500).send({email:request.payload.email,recruiterList:recruiterList,message:"Error While Updating Recruiter"});
     }
 }
-
 
 export const adminCandidateListController = async(request, response) => {
     try {
@@ -96,15 +85,11 @@ export const adminCandidateListController = async(request, response) => {
             candidateList: candidateList,
             message: ""
         });
-        // response.status(200).send({ email: request.payload.email, candidateList: candidateList, message: "" });
     } catch (error) {
         console.log("Error at adminCandidateListController");
         response.render("adminHome", { email: request.payload.email });
-        // response.status(500).send({ email: request.payload.email });
     }
 }
-
-
 
 export const adminVerifyCandidateController = async(request,response)=>{
     try{
@@ -115,17 +100,13 @@ export const adminVerifyCandidateController = async(request,response)=>{
             }
         }
         const updateResult = await candidateSchema.updateOne({_id: candidateEmail}, updateStatus);
-        //console.log("Update Result : ", updateResult);
-        
         const candidateList = await candidateSchema.find();
         response.render("adminCandidateList", {
             email: request.payload.email,
             candidateList: candidateList,
             message: candidateEmail + " Verified Successfully"
         });
-
-        // response.status(200).send({ email: request.payload.email, candidateList: candidateList, message: candidateEmail + " Verified Successfully" });
-    } catch(error){
+    }catch(error){
         console.log("Error in adminVerifyCandidateController : ", error);    
         const candidateList = await candidateSchema.find();
         response.render("adminCandidateList", {
@@ -133,11 +114,8 @@ export const adminVerifyCandidateController = async(request,response)=>{
             candidateList: candidateList,
             message: "Error While Updating Candidate"
         });
-        // response.status(500).send({ email: request.payload.email, candidateList: candidateList, message: "Error While Updating Candidate" });
     }
 }
-
-
 
 export const adminApplyCandidateListController = async (request, response) => {
     try {
@@ -148,9 +126,7 @@ export const adminApplyCandidateListController = async (request, response) => {
             let candidateObj = await candidateSchema.findOne({ _id: appliedVacancyList[i].candidateEmail });
             result.push(candidateObj?.docs); 
         }
-
         let message = appliedVacancyList.length === 0 ? "No Record Found" : "";
-
         response.render("adminAppliedCandidateList", {
             email: request.payload.email,
             appliedVacancyList,
@@ -168,20 +144,16 @@ export const adminApplyCandidateListController = async (request, response) => {
     }
 };
 
-
-
 export const adminVacancyListController = async (request, response) => {
     try {
         const vacancies = await VacancySchema.find();
-
         let message = vacancies.length === 0 ? "No Vacancies Found" : "";
-
         response.render("adminVacancyList", {
             email: request.payload.email,
             vacancies: vacancies,
             message: message
         });
-    } catch (error) {
+    }catch (error) {
         console.log("Error fetching vacancies:", error);
         response.render("adminVacancyList", {
             email: request.payload.email,
@@ -190,5 +162,3 @@ export const adminVacancyListController = async (request, response) => {
         });
     }
 };
-
-

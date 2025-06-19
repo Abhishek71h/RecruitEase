@@ -59,5 +59,6 @@ candidateRouter.get('/resetPassword/:token', showResetPasswordFormController);
 candidateRouter.post('/resetPassword/:token', resetPasswordController);
 
 candidateRouter.post('/chatbot', handleChat);
+candidateRouter.get('/reset-password/:token', showResetPasswordFormController);
 
 export default candidateRouter;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { recruiterRegistrationController,recruiterVerifyEmailController,recruiterLoginController,recruiterVacancyPostedController,recruiterLogoutController,appliedCandidateListController,recruiterUpdateStatusController, sendResetLinkController, resetPasswordController,  handleRecruiterChat} from '../controller/recruiterController.js';
+import { recruiterRegistrationController,recruiterVerifyEmailController,recruiterLoginController,recruiterVacancyPostedController,recruiterLogoutController,appliedCandidateListController,recruiterUpdateStatusController, sendResetLinkController, showResetPasswordForm, resetPasswordController,  handleRecruiterChat} from '../controller/recruiterController.js';
 import jwt from 'jsonwebtoken';
 import recruiterSchema from '../model/recruiterSchema.js';
 import dotenv from 'dotenv';
@@ -9,10 +9,7 @@ var recruiterRouter = express.Router();
 recruiterRouter.use(express.static('public'));
 
 let authenticateJWT = (request,response,next)=>{
-    //console.log("gets entry");
     const token = request.cookies.recruiter_jwt_token;
-    //const token = request.query.recruiterToken;
-    //console.log("token : ",token);
     try{  
         jwt.verify(token,recruiter_secret_key,(error,payload)=>{
             if(error){
@@ -74,6 +71,8 @@ recruiterRouter.get('/resetPassword/:token', (req, res) => {
 recruiterRouter.post('/resetPassword/:token', resetPasswordController);
 
 recruiterRouter.post('/chatbot', handleRecruiterChat);
+
+recruiterRouter.get('/reset-password/:token', showResetPasswordForm);
 
 
 

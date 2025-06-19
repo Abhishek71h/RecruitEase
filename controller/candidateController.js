@@ -14,56 +14,42 @@ var candidate_secret_key = process.env.CANDIDATE_SECRET_KEY;
 
 export const candidateRegistrationController = async (request, response) => {
     try {
-        //console.log("candidate file data : ",request.files);
-        
         const __filename = fileURLToPath(import.meta.url);
-        //console.log("__filename : ",__filename);
         const __dirname = path.dirname(__filename).replace("\\controller", "");
-        //console.log("__dirname : ",__dirname);
-        //console.log("request.files : ",request.files);
         const filename = request.files.docs;
         const fileName = new Date().getTime() + filename.name;
         const pathName = path.join(__dirname, "/public/documents/", fileName);
-        //console.log("pathName : ",pathName);
 
         filename.mv(pathName, async (error) => {
             if (error) {
-                console.log("Error occured while uploading file");
-            } else {
-                console.log("File uploaded successfully");
-                const { name, _id, password, gender, dob, address, contact, qualification, percentage, experience } = request.body;
-                const obj = {
-                    name: name,
-                    _id: _id,
-                    password: await bcrypt.hash(password, 10),
-                    gender: gender,
-                    dob: dob,
-                    address: address,
-                    contact: contact,
-                    qualification: qualification,
-                    percentage: percentage,
-                    experience: experience,
-                    docs:fileName
-                }
-                const mailContent = `Hello ${_id},<br>This is a verification mail by RecruitEase. You Needs to verify yourself by clicking on the below link.<br><a href='http://localhost:3000/candidate/verifyEmail?email=${_id}'>Click Here To Verify</a>`;
-
-                mailer.mailer(mailContent, _id, async (info) => {
-                    if (info) {
-                        const result = await candidateSchema.create(obj);
-                        //console.log("Result of candidate registration : ", result);
-                        response.render("candidateLogin", { message: "Email Sent | Please Verify" });
-
-                    } else {
-                        console.log("Error while sending email");
-                        response.render("candidateRegistration", { message: "Error while sending email" });
-                    }
-                })
+                console.log("Error occurred while uploading file");
+                return response.render("candidateRegistration", { message: "File upload failed" });
             }
+
+            const { name, _id, password, gender, dob, address, contact, qualification, percentage, experience } = request.body;
+
+            const obj = {
+                name,
+                _id,
+                password: await bcrypt.hash(password, 10),
+                gender,
+                dob,
+                address,
+                contact,
+                qualification,
+                percentage,
+                experience,
+                docs: fileName,
+                emailVerify: "Verified"  // Email verified by default
+            };
+
+            await candidateSchema.create(obj);
+            response.render("candidateLogin", { message: "Registered successfully. Waiting for Admin Approval." });
         });
 
     } catch (error) {
-        //console.log("Error occured in candidate registration uploading file : ", error);
-        response.render("recruiterRegistration.ejs",{message : "Error occured in recruiter registration"});
+        console.log("Error occurred in candidate registration:", error);
+        response.render("candidateRegistration", { message: "Registration failed. Please try again." });
     }
 }
 
@@ -75,46 +61,27 @@ export const candidateVerifyEmailController = async(request,response)=>{
     response.render("candidateLogin",{message:"Email Verified | Admin verification takes 24 Hours"});
 }
 
-export const candidateLoginController = async(request,response)=>{
-    try{
-         //console.log("gets entry in candidate login controller");
-            
-         const candidateObj = await candidateSchema.findOne({_id:request.body.email});
-         //console.log("-------------> ",candidateObj);
-         if(candidateObj==null)
-                throw new Error("Candidate not exist");   
-         
-         const candidatePassword = candidateObj.password;
-         const candidateStatus = candidateObj.status;
-         //console.log("candidateStatus : ",candidateStatus);
-         //console.log("typeof candidateStatus : ",typeof candidateStatus);
-         
-         const adminVerifyStatus = candidateObj.adminVerify;
-         const emailVerifyStatus = candidateObj.emailVerify;
-         
-         const status = await bcrypt.compare(request.body.password,candidatePassword);
-         if(status && candidateStatus && adminVerifyStatus=="Verified" && emailVerifyStatus == "Verified"){
-            const expireTime = {expiresIn:'1d'};
-            const token = jwt.sign({email:request.body.email},candidate_secret_key,expireTime);
-            //console.log("Token : ",token);
-            
-            if(!token)
-                response.render("candidateLogin",{message:"Error while setting up the token while candidate login"});
-                //response.status(203).send({status:false,message:"Error while setting up the token while candidate login"});
+export const candidateLoginController = async (request, response) => {
+    try {
+        const candidateObj = await candidateSchema.findOne({ _id: request.body.email });
+        if (!candidateObj) throw new Error("Candidate not exist");
 
-            response.cookie('candidate_jwt_token',token,{maxAge:24*60*60*1000,httpOnly:true});
-            response.render("candidateHome",{email:request.body.email});
-            //response.status(200).send({status:true,email:request.body.email,token:token}); 
-        }     
-        else
-             response.render("candidateLogin",{message:"Password is Wrong || Admin may need to verfiy"}); 
-            //response.status(203).send({status:false,message:"Password is Wrong"});
-    }catch(error){
-        console.log("Error in candidateLogin : ",error);
-        response.render("candidateLogin",{message:"Candidate doesn't exist"}); 
-        //response.status(500).send({status:false,message:"Something Went Wrong"});
+        const isMatch = await bcrypt.compare(request.body.password, candidateObj.password);
+
+        if (isMatch && candidateObj.status && candidateObj.adminVerify === "Verified") {
+            const token = jwt.sign({ email: request.body.email }, candidate_secret_key, { expiresIn: '1d' });
+
+            response.cookie('candidate_jwt_token', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+            response.render("candidateHome", { email: request.body.email });
+        } else {
+            response.render("candidateLogin", { message: "Incorrect password or admin approval pending" });
+        }
+
+    } catch (error) {
+        console.log("Error in candidateLogin:", error);
+        response.render("candidateLogin", { message: "Candidate doesn't exist or login error" });
     }
-}
+};
 
 export const candidateLogoutController = async(request,response)=>{
     //console.log(response);
@@ -197,22 +164,27 @@ export const sendResetLinkController = async (req, res) => {
             <a href="${resetLink}">Reset Password</a>
         `;
 
-        mailer.mailer(mailContent, email, (info) => {
-            res.render('candidateForgotPassword', { message: 'Reset link sent to your email. Please check your inbox.' });
-        });
-        
-    } catch (error) {
+            const previewURL = await mailer(mailContent, email); // ✅ returns preview URL
+            res.render('candidateForgotPassword', {
+            message: 'Reset link has been sent to your email (Preview URL below)',
+            previewUrl: previewURL  // ✅ Changed to match EJS
+});
+    }catch (error) {
         console.log("Error in sending reset link:", error);
         res.render('candidateForgotPassword', { message: 'An error occurred. Please try again.' });
     }
 };
 
 
-export const showResetPasswordFormController = (req, res) => {
-    const { token } = req.params;
-    res.render('candidateResetPassword', { token });
+export const showResetPasswordFormController = async (req, res) => {
+  const { token } = req.params;
+  try {
+    jwt.verify(token, candidate_secret_key); // only to check token validity
+    res.render("candidateResetPassword", { message: "", token }); // send token to view
+  } catch (error) {
+    res.render("candidateResetPassword", { message: "Token expired or invalid", token: null });
+  }
 };
-
 
 
 export const resetPasswordController = async (req, res) => {

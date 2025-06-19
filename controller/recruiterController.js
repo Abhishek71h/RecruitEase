@@ -84,44 +84,34 @@ export const recruiterLoginController = async (request, response) => {
     }
 }
 
-
 export const recruiterRegistrationController = async (request, response) => {
     const { name, recruiter, email, password, contact, address } = request.body;
     try {
         const obj = {
-            name: name,
-            recruiter: recruiter,
-            email: email,
+            name,
+            recruiter,
+            email,
             password: await bcrypt.hash(password, 10),
-            contact: contact,
-            address: address
-        }
-        const mailContent = `Hello ${email},<br>This is a verification mail by RecruitEase. You Needs to verify yourself by clicking on the below link.<br><a href='http://localhost:3000/recruiter/verifyEmail?email=${email}'>Click Here To Verify</a>`;
+            contact,
+            address,
+            emailVerify: "Verified",         // ✅ Auto-mark email as verified
+            adminVerify: "Not Verified",     // ❗ Admin will approve later
+            status: "true"
+        };
 
-
-        //const mailContent = `Hello ${email},<br>This is a verification mail by RecruitEase. You Needs to verify yourself by clicking on the below link.<br><a href='http://localhost:3000/recruiter/verifyEmail?email=${email}'>Click Here To Verify</a>`;
-
-        mailer.mailer(mailContent, email, async (info) => {
-            if (info) {
-
-                const result = await recruiterSchema.create(obj);
-                console.log("Result of recruiter registration : ", result);
-                response.render("recruiterLogin", { message: "Email Sent | Please Verify" });
-                //response.status(201).send({status:true,message: "Email Sent | Please Verify"});
-            } else {
-                console.log("Error while sending email");
-                response.render("recruiterRegistration", { message: "Error while sending email" });
-                //response.status(203).send({status:false,message: "Error while sending email"});
-            }
-        })
-
+        const result = await recruiterSchema.create(obj);
+        console.log("Recruiter registered: ", result);
+        response.render("recruiterLogin", {
+            message: "Registration successful! Wait for admin approval."
+        });
 
     } catch (error) {
-        console.log("Error occured in recruiter registration : ", error);
-        response.render("recruiterRegistration.ejs", { message: "Error occured in recruiter registration" });
-        //response.status(500).send({status:false,message: "Error occured in recruiter registration"});
+        console.log("Error in recruiter registration: ", error);
+        response.render("recruiterRegistration", {
+            message: "Registration failed. Please try again."
+        });
     }
-}
+};
 
 export const recruiterVacancyPostedController = async (request, response) => {
     try {
@@ -231,39 +221,49 @@ export const recruiterUpdateStatusController = async (request, response) => {
 }
 
 
-
 export const sendResetLinkController = async (req, res) => {
-    const email = req.body.email;
+  const { email } = req.body;
 
-    try {
-        const recruiter = await recruiterSchema.findOne({ email });
+  try {
+    const recruiter = await recruiterSchema.findOne({ email });
 
-        if (!recruiter) {
-            return res.render("recruiterForgotPassword", { message: "Email not found" });
-        }
-
-        const token = jwt.sign({ email: recruiter._id }, process.env.RECRUITER_SECRET_KEY, { expiresIn: '1h' });
-
-        const resetLink = `http://localhost:3000/recruiter/resetPassword/${token}`;
-
-        const mailContent = `
-            <h2>Reset Your Password</h2>
-            <p>Click the following link to reset your password:</p>
-            <a href="${resetLink}">Reset Password</a>
-        `;
-
-        mailer.mailer(mailContent, email, (info) => {
-            console.log("Reset email sent:", info.response);
-        });
-
-        res.render("recruiterForgotPassword", { message: "Reset link sent to your email" });
-
-    } catch (error) {
-        console.log("Error in recruiter forgot password:", error);
-        res.render("recruiterForgotPassword", { message: "Something went wrong" });
+    if (!recruiter) {
+      return res.render('recruiterForgotPassword', { message: 'No recruiter found with this email', previewURL: null });
     }
+
+    const token = jwt.sign({ email: recruiter._id }, recruiter_secret_key, { expiresIn: '10m' });
+
+    const resetLink = `http://localhost:3000/recruiter/reset-password/${token}`;
+    const mailContent = `
+      <h2>Password Reset Request</h2>
+      <p>Click the link below to reset your password:</p>
+      <a href="${resetLink}">${resetLink}</a>
+    `;
+
+    const previewURL = await mailer(mailContent, email); // ✅ returns preview URL
+
+    res.render('recruiterForgotPassword', {
+    message: 'Reset link has been sent to your email (Preview URL below)',
+    previewUrl: previewURL  // ✅ Changed to match EJS
+});
+} catch (err) {
+    console.error("Error in recruiter forgot password:", err);
+    res.render('recruiterForgotPassword', {
+      message: 'Something went wrong. Please try again.',
+      previewURL: null
+    });
+  }
 };
 
+export const showResetPasswordForm = async (req, res) => {
+  const { token } = req.params;
+  try {
+    jwt.verify(token, recruiter_secret_key); // only to check token validity
+    res.render("recruiterResetPassword", { message: "", token }); // send token to view
+  } catch (error) {
+    res.render("recruiterResetPassword", { message: "Token expired or invalid", token: null });
+  }
+};
 
 
 export const resetPasswordController = async (req, res) => {
@@ -313,7 +313,6 @@ export const resetPasswordController = async (req, res) => {
         });
     }
 };
-
 
 export const handleRecruiterChat = async (req, res) => {
     const userMessage = req.body.message;

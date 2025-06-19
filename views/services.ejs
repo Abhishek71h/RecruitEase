@@ -1,100 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RecruitEase - Services</title>
+<%- include('./homeHeader.ejs') %>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
-
-  <style>
-    .service-card {
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: transform 0.2s ease-in-out;
+<!-- Typed.js & Font Awesome -->
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://kit.fontawesome.com/58a810656e.js" crossorigin="anonymous"></script>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to bottom right, #f9f9f9, #edf1ff);
+        color: #333;
+        overflow-x: hidden;
     }
-    .service-card:hover {
-      transform: translateY(-5px);
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
     }
-    .service-icon {
-      font-size: 2.5rem;
-      color: #0d6efd;
+
+    h2 {
+        font-size: 32px;
+        background: linear-gradient(to right, #4a5fd3, #7289fa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 15px;
     }
-  </style>
-</head>
-<body>
 
-  <!-- Header -->
-  <header class="bg-light py-3 px-4 shadow-sm">
-    <h2 class="m-0">RecruitEase</h2>
-  </header>
+    .intro-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 80px 40px 60px;
+        background: linear-gradient(120deg, #ffffff, #f2f6ff);
+        flex-wrap: wrap;
+        gap: 40px;
+    }
 
-  <div class="container mt-5 animate__animated animate__fadeIn">
-    <div class="text-center mb-5">
-      <i class="bi bi-briefcase-fill text-primary" style="font-size: 3rem;"></i>
-      <h1 class="mt-3">Our Services</h1>
-      <p class="text-muted">
-        Explore the tools and features RecruitEase offers to simplify and elevate your hiring journey.
-      </p>
-    </div>
+    .intro-text {
+        flex: 1;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2e56d3;
+        max-width: 600px;
+        line-height: 1.3;
+    }
 
-    <div class="row g-4">
-      <% const services = [
-        {
-          icon: "bi-clipboard-data",
-          title: "Job Posting & Management",
-          content: "Post jobs with rich details, set role-specific filters, and manage postings from your dashboard."
-        },
-        {
-          icon: "bi-person-lines-fill",
-          title: "Candidate Application Tracking",
-          content: "Track applications, view resumes, and manage candidates in real-time from a centralized dashboard."
-        },
-        {
-          icon: "bi-shield-lock-fill",
-          title: "Admin Oversight & Security",
-          content: "Admins oversee all operations—from verifying users to blocking candidates and deleting vacancies—ensuring system integrity."
-        },
-        {
-          icon: "bi-funnel-fill",
-          title: "Advanced Candidate Filtering",
-          content: "Use smart filters and keyword-based search to find the best-fit candidates faster."
-        },
-        {
-          icon: "bi-shield-lock-fill",
-          title: "Data Security & Role-Based Access",
-          content: "Ensure user privacy with end-to-end encryption and permission-based access control."
-        },
-        {
-          icon: "bi-clipboard-check-fill",
-          title: "Application Tracking & Status Updates",
-          content: "Institutions can view all applications, shortlist candidates, and update their interview status seamlessly."
+    .intro-text span {
+        background: linear-gradient(to right, #4a5fd3, #00c3ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .intro-image img {
+        width: 280px;
+        height: 280px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        border: 5px solid #ffffff;
+        transition: transform 0.3s ease;
+    }
+
+    .intro-image img:hover {
+        transform: scale(1.05);
+    }
+
+    section.content {
+        padding: 60px 30px;
+        background: linear-gradient(to bottom, #f9fbff, #e8edff);
+    }
+
+    .content-wrapper {
+        max-width: 1150px;
+        margin: auto;
+    }
+
+    .features-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .feature-box {
+        flex: 1 1 250px;
+        background: linear-gradient(145deg, #ffffff, #f2f6ff);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+        text-align: center;
+    }
+
+    .feature-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-box i {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+        .intro-section {
+            flex-direction: column;
+            text-align: center;
+            padding: 50px 20px;
         }
-      ]; %>
 
-      <% services.forEach((service, index) => { %>
-        <div class="col-md-6 col-lg-4 animate__animated animate__fadeInUp" style="animation-delay: 1ms">
-          <div class="card service-card h-100 p-4">
-            <div class="mb-3">
-              <i class="bi <%= service.icon %> service-icon"></i>
-            </div>
-            <h5 class="card-title"><%= service.title %></h5>
-            <p class="card-text text-muted"><%= service.content %></p>
-          </div>
-        </div>
-      <% }); %>
+        .intro-text {
+            font-size: 1.8rem;
+        }
 
+        .intro-image {
+            padding: 20px 0;
+        }
+
+        section.content {
+            padding: 40px 20px;
+        }
+
+        .feature-box {
+            flex: 1 1 100%;
+        }
+
+        h2 {
+            font-size: 24px !important;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<!-- Intro Section -->
+<section class="intro-section">
+    <div class="intro-text">
+        <span class="role"></span>
     </div>
-  </div>
+    <div class="intro-image">
+        <img src="/images/job.jpg" alt="RecruitEase Services">
+    </div>
+</section>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<!-- Services Section -->
+<section class="content">
+    <div class="content-wrapper">
+        <h2 style="color: #222; font-size: 32px;">Our <span style="color: #4a5fd3;">Services</span></h2>
+        <p style="color: #555; line-height: 1.6;">
+            At RecruitEase, we provide powerful tools and smart solutions to make the hiring journey easier, faster, and more effective for both candidates and recruiters.
+        </p>
+
+        <div class="features-container">
+            <div class="feature-box">
+                <i class="fas fa-search" style="color:#4a5fd3;"></i><br>
+                <strong>Job Posting & Management</strong><br>
+                Post jobs with rich details, set role-specific filters, and manage postings from your dashboard.
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-user-check" style="color:#2ab57d;"></i><br>
+                <strong>Candidate Application Tracking</strong><br>
+               Track applications, view resumes, and manage candidates in real-time from a centralized dashboard.
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-comments" style="color:#ff715b;"></i><br>
+                <strong>AI Chatbot Assistance</strong><br>
+                Get instant help and guidance while navigating the platform.
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-tachometer-alt" style="color:#845ec2;"></i><br>
+                <strong>Real-time Updates</strong><br>
+                Get updates on job posts, applications, and profile activity.
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-users-cog" style="color:#00c3ff;"></i><br>
+                <strong>Data Security & Role-Based Access</strong><br>
+                Ensure user privacy with end-to-end encryption and permission-based access control.
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-lock" style="color:#d65db1;"></i><br>
+                <strong>Application Tracking & Status Updates</strong><br>
+                Institutions can view all applications, shortlist candidates, and update their interview status seamlessly.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Typed.js Animation -->
+<script>
+    var typeData = new Typed(".role", {
+        strings: [
+            "Explore Our Services",
+            "Built for Candidates & Recruiters",
+            "Empowering Smart Hiring"
+        ],
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 50,
+        backDelay: 2000,
+    });
+</script>

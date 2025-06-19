@@ -1,72 +1,108 @@
+<%- include('./homeHeader.ejs') %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RecruitEase - FAQ</title>
-  
-  <!-- Bootstrap CSS (needed for accordion) -->
+  <title>RecruitEase</title>
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-  <!-- Animate.css CDN -->
+  <!-- Animate.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <!-- Bootstrap Icons (for the question icon) -->
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
 
   <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #f9fbff, #e8edff);
+      margin: 0;
+      padding: 0;
+    }
+
+    .faq-section {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .faq-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: linear-gradient(to right, #4a5fd3, #7289fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 40px;
+    }
+
+    .faq-subtext {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 40px;
+    }
+
+    .accordion-item {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      margin-bottom: 20px;
+      transition: transform 0.25s ease-in-out;
+    }
+
+    .accordion-item:hover {
+      transform: translateY(-4px);
+    }
+
+    .accordion-button {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+
+    .accordion-body {
+      background-color: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      animation: fadeIn 0.4s ease-in;
+      text-align: left;
+    }
+
     .accordion-button::after {
       transition: transform 0.3s ease-in-out;
     }
+
     .accordion-button.collapsed::after {
       transform: rotate(0deg);
     }
+
     .accordion-button:not(.collapsed)::after {
       transform: rotate(180deg);
     }
-    .accordion-item {
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 15px;
-      transition: transform 0.2s ease-in-out;
-    }
-    .accordion-item:hover {
-      transform: translateY(-2px);
-    }
-    .accordion-button {
-      background-color: #f8f9fa;
-      font-weight: 500;
-    }
-    .accordion-body {
-      background-color: #ffffff;
-      animation: fadeIn 0.4s ease-in;
-    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .faq-title {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header Placeholder -->
-  <!-- Replace this with your own header component -->
-  <header class="bg-light py-3 px-4 shadow-sm">
-    <h2 class="m-0">RecruitEase</h2>
-  </header>
-
-  <div class="container mt-5 animate__animated animate__fadeIn">
-    <div class="text-center mb-4">
-      <i class="bi bi-question-circle-fill text-primary" style="font-size: 3rem;"></i>
-      <h1 class="mt-3">Frequently Asked Questions</h1>
-      <p class="text-muted">
-        Find answers to common questions about RecruitEase and how to use our platform effectively.
-      </p>
-    </div>
+  <section class="faq-section animate__animated animate__fadeIn">
+    <i class="bi bi-question-circle-fill text-primary" style="font-size: 3rem;"></i>
+    <h1 class="faq-title">Frequently Asked Questions</h1>
+    <p class="faq-subtext">
+      Find answers to common questions about RecruitEase and how to use our platform effectively.
+    </p>
 
     <div class="accordion" id="faqAccordion">
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading0">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse0">
             What is RecruitEase?
@@ -74,12 +110,12 @@
         </h2>
         <div id="collapse0" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            RecruitEase an online based carrier recruitment web application in which candidate can register and apply themselves online and apply for job. 
+            RecruitEase is a modern, web-based recruitment platform designed for job seekers and recruiters. Candidates can register, create profiles, and apply for jobs, while recruiters can post openings and manage applications efficiently.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading1">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
             How do I register as a candidate?
@@ -87,12 +123,12 @@
         </h2>
         <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            Click on the "Sign Up" button in the navigation bar, select "Candidate", and fill out the required details to create your profile.
+            Click on the “Sign Up” button in the top navigation, choose the “Candidate” role, and complete the registration form with your details.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading2">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
             How can I post a job as a recruiter?
@@ -100,25 +136,25 @@
         </h2>
         <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            After signing in as a recruiter, navigate to the "Add Job" section from the dashboard. Fill out job details like title, description, requirements, and submit the form to post.
+            After logging in as a recruiter, go to the “Add Job” section in your dashboard. Fill out the job details including title, description, and requirements, then submit the form.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading3">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-            How do I Change my password?
+            How do I change my password?
           </button>
         </h2>
         <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            Go to the "Change Password" section after logging in. You can update your Password by Verifying throgh Registered Email-Id.
+            Navigate to the “Change Password” section in your account settings. You’ll receive a verification link at your registered email to securely update your password.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading4">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
             How do I update my profile?
@@ -126,12 +162,12 @@
         </h2>
         <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            Go to the "Profile" section after logging in. You can update your personal information, experience, skills, and resume from there.
+            After logging in, go to the “Profile” section. You can edit your personal information, add skills and experience, and upload your updated resume.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+      <div class="accordion-item animate__animated animate__fadeInUp">
         <h2 class="accordion-header" id="heading5">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
             Is RecruitEase free to use?
@@ -139,14 +175,14 @@
         </h2>
         <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body">
-            Yes, RecruitEase is free for candidates. Recruiters can post a limited number of jobs for free and can opt for premium plans for more features.
+            Yes, RecruitEase is free for candidates. Recruiters can post a limited number of jobs for free, and premium plans are available for additional features.
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Bootstrap JS (for accordion functionality) -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
