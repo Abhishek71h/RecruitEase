@@ -1,75 +1,42 @@
 <%- include('./candidateHomeHeader.ejs')%>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f4f4f4;
-    }
-
-    h2 {
-        color: #333;
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-
-    table {
+    /* Table styling */
+    table#space {
         border-collapse: collapse;
         width: 100%;
-        background-color: white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
     }
 
-    th, td {
-        padding: 12px 15px;
-        text-align: center;
+    table#space th, table#space td {
+        text-align: left;
+        padding: 12px 10px;
         border: 1px solid #ddd;
         font-size: 14px;
     }
 
-    th {
+    table#space thead {
         background-color: #2e56d3;
         color: white;
     }
 
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
+    table#space tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
     }
 
-    tr:hover {
-        background-color: #f1f1f1;
+    table#space tbody tr:hover {
+        background-color: #e6e6ff;
+    }
+
+    h2 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
     }
 
     span[style*="color:red"] {
-        font-weight: bold;
         font-size: 16px;
-    }
-
-    #space {
-        margin-top: 20px;
-    }
-
-    @media screen and (max-width: 768px) {
-        table, thead, tbody, th, td, tr {
-            display: block;
-        }
-
-        thead tr {
-            display: none;
-        }
-
-        td {
-            position: relative;
-            padding-left: 50%;
-            text-align: left;
-        }
-
-        td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 10px;
-            font-weight: bold;
-        }
+        font-weight: bold;
     }
 </style>
 

@@ -1,88 +1,45 @@
 <%- include('./candidateHomeHeader.ejs')%>
 
-
 <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: linear-gradient(to bottom right, #f9fbff, #e8edff);
-        color: #333;
-    }
-
-    h2 {
-        color: #333;
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-
-    table {
+    /* Table styling */
+    table#space {
         border-collapse: collapse;
         width: 100%;
-        background-color: white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
     }
 
-    th, td {
-        padding: 12px 15px;
-        text-align: center;
+    table#space th, table#space td {
+        text-align: left;
+        padding: 12px 10px;
         border: 1px solid #ddd;
         font-size: 14px;
     }
 
-    th {
+    table#space thead {
         background-color: #2e56d3;
         color: white;
     }
 
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
+    table#space tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
     }
 
-    tr:hover {
-        background-color: #f1f1f1;
+    table#space tbody tr:hover {
+        background-color: #e6e6ff;
     }
 
-    a {
-        text-decoration: none;
-        color: #007bff;
-    }
-
-    a:hover {
-        color: #0056b3;
+    h2 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
     }
 
     span[style*="color:red"] {
+        font-size: 16px;
         font-weight: bold;
     }
-
-    #space {
-        margin-top: 20px;
-    }
-
-    @media screen and (max-width: 768px) {
-        table, thead, tbody, th, td, tr {
-            display: block;
-        }
-
-        thead tr {
-            display: none;
-        }
-
-        td {
-            position: relative;
-            padding-left: 50%;
-            text-align: left;
-        }
-
-        td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 10px;
-            font-weight: bold;
-        }
-    }
 </style>
+
 
 <body>
     <br>
@@ -100,58 +57,61 @@
         <span style="font-size:20px;color:red">
             <center><%=message%></center>
         </span>
-    <table width="100%" id="space" border="1" cellspacing="0" cellpadding="5">
+
+    <div class="table-responsive">
+    <table id="space" border="1" cellspacing="0" cellpadding="5">
         <thead>
-            <th>S.No</th>
-            <th>VacancyId</th>
-            <th>Post</th>
-            <th>Subject</th>
-            <th>Location</th>
-            <th>Criteria</th>
-            <th>Experience</th>
-            <th>Mode</th>
-            <th>Vacancy</th>
-            <th>Salary</th>
-            <th>AdvDate</th>
-            <th>LastDate</th>
-            <th>Recruiter</th>
-            <th>Apply</th>
+            <tr>
+                <th>S.No</th>
+                <th>VacancyId</th>
+                <th>Post</th>
+                <th>Subject</th>
+                <th>Location</th>
+                <th>Criteria</th>
+                <th>Experience</th>
+                <th>Mode</th>
+                <th>Vacancy</th>
+                <th>Salary</th>
+                <th>AdvDate</th>
+                <th>LastDate</th>
+                <th>Recruiter</th>
+                <th>Apply</th>
+            </tr>
         </thead>
         <tbody>
-           
-            <%vacancyList.forEach((vacancy,index)=>{
+            <% vacancyList.forEach((vacancy, index) => {
                 let obj = {
                     vacancyId : vacancy.vacancyId,
                     candidateEmail : email,
                     recruiterEmail : vacancy.email,
                     post : vacancy.post
-                }    
+                };
             %>
-                 <tr>
-                    <td><%=index+1%></td>
-                    <td><%=vacancy.vacancyId%></td>
-                    <td><%=vacancy.post%></td>
-                    <td><%=vacancy.subject%></td>
-                    <td><%=vacancy.location%></td>
-                    <td><%=vacancy.criteria%></td>
-                    <td><%=vacancy.experience%></td>
-                    <td><%=vacancy.mode%></td>
-                    <td><%=vacancy.vacancy%></td>
-                    <td><%=vacancy.salary%></td>
-                    <td><%=vacancy.advDate.toDateString()%></td>
-                    <td><%=vacancy.lastDate.toDateString()%></td>
-                    <td><%=vacancy.email%></td>
-                    <td>
-                    <%if(status.some((obj)=>obj.vacancyId==vacancy.vacancyId && obj.candidateEmail==email)){%>    
-                            <span style="color:red">Applied</span>
-                    <%}else{%>
-                            <a href="/appliedVacancy/candidateAppliedVacancy?data=<%=JSON.stringify(obj)%>">Apply</a>
-                    <%}%>    
-                    </td>    
-                    </tr>   
-            <%})%>
+            <tr>
+                <td><%=index+1%></td>
+                <td><%=vacancy.vacancyId%></td>
+                <td><%=vacancy.post%></td>
+                <td><%=vacancy.subject%></td>
+                <td><%=vacancy.location%></td>
+                <td><%=vacancy.criteria%></td>
+                <td><%=vacancy.experience%></td>
+                <td><%=vacancy.mode%></td>
+                <td><%=vacancy.vacancy%></td>
+                <td><%=vacancy.salary%></td>
+                <td><%=vacancy.advDate.toDateString()%></td>
+                <td><%=vacancy.lastDate.toDateString()%></td>
+                <td><%=vacancy.email%></td>
+                <td>
+                    <% if(status.some(obj => obj.vacancyId === vacancy.vacancyId && obj.candidateEmail === email)) { %>
+                        <span style="color:red">Applied</span>
+                    <% } else { %>
+                        <a href="/appliedVacancy/candidateAppliedVacancy?data=<%=JSON.stringify(obj)%>">Apply</a>
+                    <% } %>
+                </td>
+            </tr>
+            <% }) %>
         </tbody>
     </table>
-    <%}%>
-
+    </div>
+    <% } %>
 </body>
