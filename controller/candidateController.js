@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import vacancySchema from "../model/vacancySchema.js";
 import appliedVacancySchema from "../model/appliedVacancySchema.js";
 import fetch from 'node-fetch'; 
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
 var candidate_secret_key = process.env.CANDIDATE_SECRET_KEY;
@@ -227,35 +228,20 @@ export const resetPasswordController = async (req, res) => {
     }
 };
 
-
-
+const genAI = new GoogleGenerativeAI("AIzaSyDAI4wqLhAScKjbEP0hfDe0QKibC-jJn1k");
 export const handleChat = async (req, res) => {
-  const userMessage = req.body.message;
+    const userMessage = req.body.message;
+    console.log("Received message from frontend:", userMessage);
 
   try {
-    // Making a request to Ollama's local API
-    const ollamaRes = await fetch("http://127.0.0.1:11434/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "llama2", // Replace with the model you want to use (e.g., llama2, or another model)
-        prompt: userMessage, // Send the user’s message as the prompt
-        stream: false, // Set to false to get the full response
-      }),
-    });
-
-    // Parse the response from Ollama
-    const data = await ollamaRes.json();
-
-    if (!ollamaRes.ok) {
-      throw new Error('Failed to communicate with Ollama');
-    }
-
-    const aiReply = data.response.trim(); // Get the AI reply from the response data
-    res.json({ reply: aiReply });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(userMessage);
+    const response = result.response.text().trim();
+    console.log("Gemini Response:", response);
+    res.json({ reply: response });
 
   } catch (err) {
-    console.error("Error with Ollama:", err);
-    res.status(500).json({ error: 'Error communicating with Ollama' });
+    console.error("Gemini error:", err.message);
+    res.status(500).json({ error: "Error communicating with Gemini API" });
   }
 };

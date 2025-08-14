@@ -7,7 +7,7 @@ import vacancySchema from '../model/vacancySchema.js';
 import dotenv from 'dotenv';
 import appliedVacancySchema from '../model/appliedVacancySchema.js';
 import fetch from 'node-fetch';
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 
 dotenv.config();
@@ -314,27 +314,22 @@ export const resetPasswordController = async (req, res) => {
     }
 };
 
+const genAI = new GoogleGenerativeAI("AIzaSyDAI4wqLhAScKjbEP0hfDe0QKibC-jJn1k");
 export const handleRecruiterChat = async (req, res) => {
     const userMessage = req.body.message;
+    console.log("Received message from frontend:", userMessage);
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(userMessage);
+    const response = result.response.text().trim();
+    console.log("Gemini Response:", response);
+    res.json({ reply: response });
+    
+  } catch (err) {
+    console.error("Gemini error:", err.message);
+    res.status(500).json({ error: "Error communicating with Gemini API" });
+  }
+};
   
-    try {
-        const ollamaRes = await fetch("http://127.0.0.1:11434/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "llama2",
-          prompt: userMessage,
-          stream: false,
-        }),
-      });
-  
-      const data = await ollamaRes.json();
-      const aiReply = data.response.trim();
-      //console.log(data);
-      res.json({ reply: aiReply });
-    } catch (err) {
-      console.error("Ollama Chat Error (Recruiter):", err);
-      res.status(500).json({ error: "Error communicating with AI" });
-    }
-  };
   
